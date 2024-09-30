@@ -65,7 +65,6 @@ function showOverlay(translatedText, copiedText) {
     
     copyButton.addEventListener('click', () => {
         navigator.clipboard.writeText(translatedText);
-        alert('Text copied to clipboard!');
     });
     
     buttonsContainer.appendChild(closeButton);
