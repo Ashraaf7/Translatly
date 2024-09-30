@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "Translatly",
+    "version": "1.0",
+    "permissions": [
+        "activeTab",
+        "clipboardRead",
+        "notifications"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "icons": {
+        "16": "icons/translate-16.png",
+        "48": "icons/translate-48.png",
+        "128": "icons/translate-128.png"
+    }
+}
