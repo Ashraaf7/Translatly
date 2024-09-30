@@ -75,7 +75,7 @@ style.textContent = `
       transition: opacity 0.5s ease;
       opacity: 0;
       animation: fadeIn 0.5s forwards;
-      font-size: 18px; /* Increase font size */
+      font-size: 15px; /* Increase font size */
   }
 
   .close-button {
