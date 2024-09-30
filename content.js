@@ -39,66 +39,123 @@ document.addEventListener('copy', async (event) => {
     }
 });
 
-// Function to show the translated text in a styled overlay
-function showOverlay(translatedText) {
-    // Create overlay element
+function showOverlay(translatedText, copiedText) {
     const overlay = document.createElement('div');
     overlay.className = 'translation-overlay';
-    overlay.textContent = translatedText;
-  
-    // Create close button
+
+    // Show the translated text
+    const translatedTextElem = document.createElement('div');
+    translatedTextElem.className = 'translated-text';
+    translatedTextElem.textContent = translatedText;
+    overlay.appendChild(translatedTextElem);
+    
+    // Create buttons container
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.className = 'buttons-container';
+
     const closeButton = document.createElement('button');
-    closeButton.textContent = '✖'; // Close button
+    closeButton.textContent = '✖';
     closeButton.className = 'close-button';
     
-    // Add close event listener
-    closeButton.addEventListener('click', () => {
-        overlay.remove(); // Remove overlay when button is clicked
+    const copyButton = document.createElement('button');
+    copyButton.textContent = 'Copy';
+    copyButton.className = 'copy-button';
+    
+    closeButton.addEventListener('click', () => overlay.remove());
+    
+    copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(translatedText);
+        alert('Text copied to clipboard!');
     });
     
-  
-    overlay.appendChild(closeButton);
+    buttonsContainer.appendChild(closeButton);
+    buttonsContainer.appendChild(copyButton);
+    overlay.appendChild(buttonsContainer);
     document.body.appendChild(overlay);
-  
-    // Automatically remove overlay after 10 seconds
+
+    // Automatically remove overlay after 10 seconds (or user-configurable)
     setTimeout(() => {
-      overlay.remove();
-  }, 10000);
-  }
-  
-  // CSS Styles for the overlay
-  const style = document.createElement('style');
-  style.textContent = `
+        overlay.remove();
+    }, 10000);
+}
+
+// CSS Styles for the overlay
+const style = document.createElement('style');
+style.textContent = `
     .translation-overlay {
         position: fixed;
-        bottom: 50px;
-        right: 50px;
-        background-color: rgba(0, 0, 0, 0.9);
-        color: white;
+        bottom: 20px; /* Position near the bottom */
+        right: 20px; /* Position near the right */
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
         padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         z-index: 9999;
-        transition: opacity 0.5s ease;
+        transition: opacity 0.5s ease, transform 0.5s ease;
         opacity: 0;
-        animation: fadeIn 0.5s forwards;
-        font-size: 15px; /* Increase font size */
+        animation: slideIn 0.5s forwards; /* Change to slide-in animation */
+        font-size: 16px;
+        max-width: 300px;
+        font-family: 'Arial', sans-serif;
+        border: 1px solid #ccc;
+        display: flex;
+        flex-direction: column; /* Arrange items in a column */
+        gap: 10px; /* Spacing between elements */
     }
-  
+
+    .translated-text {
+        line-height: 1.5;
+    }
+
+    .buttons-container {
+        display: flex; /* Align buttons horizontally */
+        justify-content: space-between; /* Space buttons apart */
+    }
+
     .close-button {
-        background: none;
+        background: #ff4d4d;
         border: none;
         color: white;
         font-size: 15px;
         cursor: pointer;
-        position: absolute;
-        top: 5px;
-        right: 5px;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
     }
-  
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+
+    .close-button:hover {
+        background: #ff1a1a;
     }
-  `;
-  document.head.appendChild(style);
+
+    .copy-button {
+        background: #007bff;
+        border: none;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 8px 12px;
+        transition: background 0.3s ease;
+    }
+
+    .copy-button:hover {
+        background: #0056b3;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(100%); /* Start from below */
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0); /* Move to original position */
+        }
+    }
+`;
+document.head.appendChild(style);
